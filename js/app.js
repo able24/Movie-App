@@ -44,12 +44,15 @@ function getMovieData(event) {
         }
         // Making an AJAX Request to get data from a server using API
         var responsePromise = fetch('https://www.omdbapi.com/?apikey=2a194df&t=drive');
-        responsePromise.then(function(responseObj) {
-            var dataPromise = responseObj.json();
-            dataPromise.then(function(data) {
-                
-            })
-        });
+
+        function handleResponse(responseObj) {
+            return responseObj.json();
+        }
+
+        responsePromise.then(handleResponse)
+        .then(function (data) {
+            console.log(data);
+        })
 
         displayMatches(matches);  // Calling the function to display the movie matches entered by the user
     }
