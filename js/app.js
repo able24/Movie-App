@@ -14,16 +14,16 @@ var itemWrapper = document.querySelector('main');
 function displayMatches(matches) {
     itemWrapper.innerHTML = '';  // clear off the paragraph text when a movie title is entered
 
-    for (var matchObj of matches) {
+    for (var matchObj of matches) {                              // Loop through the the movies chosen and display them on the screen with their title, release, movie link and background image as shown on the data.Search object (console.log(data) to see the various properties to pass in to view title and the rest). Styling of the background image is done in CSS
         itemWrapper.insertAdjacentHTML('beforeend', `         
           <div class="movie-item" style="background-image:
           linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-          url(${matchObj.image_url})">
-            <h3>${matchObj.title}</h3>
-            <p>${matchObj.description}</p>
-            <a href="${matchObj.imdb_url}" target="_blank">View More Details</a>  
+          url(${matchObj.Poster})">
+            <h3>${matchObj.Title}</h3>
+            <p>Release Year: ${matchObj.Year}</p>
+            <a data-id="${matchObj.imdbID}" href="https://www.imdb.com/title/${matchObj.imdbID}" target="_blank">View More Details</a>  
           </div> 
-        `);                     // Loop through the the movies chosen and display them on the screen with their title, description, movie link and background image. Styling of the background image is done in CSS
+        `);                     
     }
 
 }
@@ -57,9 +57,48 @@ function getMovieData(event) {
     }
 
 }
+
+// Function to show more details if the 'view more details' link is clicked on a movie
+function showMovieDetails(movieId) {
+    // Making an AJAX Request to get data from a movie server using the movie ID
+    var responsePromise = fetch(`https://www.omdbapi.com/?apikey=2a194df&i=${movieId}`); // fetching movie from external server based on the ID of the movie the user types in
+
+    function handleResponse(responseObj) {
+        return responseObj.json();
+    }
+
+    responsePromise
+    .then(handleResponse)
+    .then(function (data) {
+        var detailDisplay = document.querySelector('.detail-display'); // Targetting the div that holds the details to be displayed
+
+        // Writing the content of the div using javaScript - styling is already done in CSS
+        detailDisplay.innerHTML = `                     
+        <h2>Title: ${data.Title}</h2>
+        <h3>Release Year: ${data.Year}</h3>
+        <p><strong>Plot:</strong> ${data.Plot}</p>
+        <p><strong>Genre:</strong> ${data.Genre}</p>
+        <a href="https://www.imdb.com/title/${data.imdbID}" target="_blank">View IMDB Page</a>`
+
+        detailDisplay.classList.remove('hide');  // displaying the details on the browser once the 'view more details' link is clicked
+    });
+
+}
+
+
 // Create an initializing function - when the page loads, things that will run initially - listens for a key press
 function init() {
     searchInput.addEventListener('keydown', getMovieData);
+
+    // Add event listener for when 'view more details' button on a movie is clicked
+    itemWrapper.addEventListener('click', function(event) {   
+        event.preventDefault();
+        var anchorLink = event.target;  // Targetting the actual button clicked as there are many buttons on the page
+
+        if(anchorLink.tagName === 'A') {             // If the button clicked is the anchor tag <a> button then call the showMovieDetails() function created above and pass in the id of the movie clicked
+            showMovieDetails(anchorLink.dataset.id)
+        }
+    })
 
 }
 
