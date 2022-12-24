@@ -34,27 +34,26 @@ function getMovieData(event) {
     var searchText = searchInput.value.trim().toLowerCase();  // Set input entered by user to lower case and remove any spacings using the trim()
 
     if (keyCode === 13 && searchText) {    // Checking to see if the key pressed is the enter key and if some text is typed in the input box
-        var matches = [];
-        for (var movie of movieData) {
-            if (movie.title.toLowerCase().includes(searchText)) {   // If entered text includes some characters of the movie title in the database, there is a match
-                matches.push(movie);  // store all the movie titles that match the entered text in mataches array
-
-
-            }
-        }
+        
         // Making an AJAX Request to get data from a server using API
-        var responsePromise = fetch('https://www.omdbapi.com/?apikey=2a194df&t=drive');
+        var responsePromise = fetch(`https://www.omdbapi.com/?apikey=2a194df&s=${searchText}`); // fetching movie from external server based on the title the user types in
 
         function handleResponse(responseObj) {
             return responseObj.json();
         }
 
-        responsePromise.then(handleResponse)
+        responsePromise
+        .then(handleResponse)
         .then(function (data) {
-            console.log(data);
-        })
+            displayMatches(data.Search);  // Calling the function to display the movie matches entered by the user
+        });
 
-        displayMatches(matches);  // Calling the function to display the movie matches entered by the user
+        /* // Shorter and modern version of the code for making AJAX request to a server (Arrow Function)
+        fetch('https://www.omdbapi.com/?apikey=2a194df&t=drive')
+        .then(res => res.json())
+        .then(data => console.log(data));*/
+
+        
     }
 
 }
