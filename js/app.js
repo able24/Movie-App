@@ -13,7 +13,10 @@ var itemWrapper = document.querySelector('main');
 // Function to create HTML div (use backtick so you can insert variables) to display entered movie title
 function displayMatches(matches) {
     itemWrapper.innerHTML = '';  // clear off the paragraph text when a movie title is entered
-
+    
+    if ('!matches') {
+        return itemWrapper.innerHTML = `<p class="no-search">No results found.</p>`;  // Displaying no results found if movie title is not found. The return keyword breaks out of the function and does not require an else statement.
+    } 
     for (var matchObj of matches) {                              // Loop through the the movies chosen and display them on the screen with their title, release, movie link and background image as shown on the data.Search object (console.log(data) to see the various properties to pass in to view title and the rest). Styling of the background image is done in CSS
         itemWrapper.insertAdjacentHTML('beforeend', `         
           <div class="movie-item" style="background-image:
@@ -24,7 +27,7 @@ function displayMatches(matches) {
             <a data-id="${matchObj.imdbID}" href="https://www.imdb.com/title/${matchObj.imdbID}" target="_blank">View More Details</a>  
           </div> 
         `);                     
-    }
+    }    
 
 }
 
