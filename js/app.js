@@ -14,7 +14,7 @@ var itemWrapper = $('main');
 function displayMatches(matches) {
     itemWrapper.html('');  // clear off the paragraph text when a movie title is entered
 
-    if ('!matches') {
+    if (!matches) {
         itemWrapper.html(`<p class="no-search">No results found.</p>`);  // Displaying no results found if movie title is not found. The return keyword breaks out of the function and does not require an else statement.
     } else {
         for (var matchObj of matches) {                              // Loop through the the movies chosen and display them on the screen with their title, release, movie link and background image as shown on the data.Search object (console.log(data) to see the various properties to pass in to view title and the rest). Styling of the background image is done in CSS
@@ -28,9 +28,11 @@ function displayMatches(matches) {
               </div> 
             `);
         }
-    }   
-
+    } 
+    
 }
+
+
 
 // Function to get movie titles that match entered title by user.
 function getMovieData(event) {
@@ -80,9 +82,9 @@ function init() {
     searchInput.keydown(getMovieData);
 
     // Add event listener for when 'view more details' button on a movie is clicked
-    itemWrapper.on('click', function (event) {
+    itemWrapper.click(function (event) {
         event.preventDefault();
-        var anchorLink = $(this);  // Targetting the actual button clicked as there are many buttons on the page
+        var anchorLink = event.target;  // Targetting the actual button clicked as there are many buttons on the page
 
         if (anchorLink.tagName === 'A') {             // If the button clicked is the anchor tag <a> button then call the showMovieDetails() function created above and pass in the id of the movie clicked
             showMovieDetails(anchorLink.dataset.id)
