@@ -8,6 +8,7 @@
 // Targeting html elements and store to variables
 var searchInput = $('.search');
 var itemWrapper = $('main');
+var exitButton = $('#reset');
 
 
 // Function to create HTML div (use backtick so you can insert variables) to display entered movie title
@@ -28,8 +29,8 @@ function displayMatches(matches) {
               </div> 
             `);
         }
-    } 
-    
+    }
+
 }
 
 
@@ -69,10 +70,11 @@ function showMovieDetails(movieId) {
     <h3>Release Year: ${data.Year}</h3>
     <p><strong>Plot:</strong> ${data.Plot}</p>
     <p><strong>Genre:</strong> ${data.Genre}</p>
-    <a href="https://www.imdb.com/title/${data.imdbID}" target="_blank">View IMDB Page</a>`);
+    <a href="https://www.imdb.com/title/${data.imdbID}" target="_blank">View IMDB Page</a>
+    <button id="reset" onclick="this.parentNode.remove(); return false;">Exit</button>`); // onclick="this.parentNode.remove(); return false;" removes the detailDisplay when clicked. It has to be written this way as the button is inside the div which is displayed on the fly.
 
             detailDisplay.removeClass('hide');  // displaying the details on the browser once the 'view more details' link is clicked
-        });      
+        });
 
 }
 
